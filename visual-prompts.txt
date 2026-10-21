@@ -1,0 +1,34 @@
+Asset: worker-duo.png
+Transparent background: true
+Use case: ads-marketing
+Asset type: transparent portrait hero cutout for Arabic Aspar Residences workforce housing website, placed over red hero beside Arabic heading.
+Primary request: premium photoreal cutout of two adult migrant male skilled workers in a Saudi workforce housing brand campaign, cheerful natural dignified expressions, one South Asian and one Southeast Asian. Clean bright orange-red safety vests, one white hard hat held under arm and the other helmet worn. Relaxed standing waist up, slightly different body angles, two people close together arranged as a cohesive group filling composition.
+Composition/framing: portrait aspect approximately 4:5; full uncut heads and elbows, realistic anatomy.
+Lighting/mood: natural sunlight, polished human documentary advertising image.
+Scene/backdrop: isolated actual transparent background.
+Constraints: no text, logos, buildings, checkered background or artificial floor. Preserve genuine alpha transparency.
+
+Asset: service-world.png
+Transparent background: true
+Use case: stylized-concept
+Asset type: transparent square illustration for Arabic Aspar Residences integrated workforce living services website.
+Primary request: editorial high-end playful 3D clay miniature illustration of integrated workforce living services as one coherent sculptural composition: a neat red-accent bunk bed with white linen at rear, miniature white minibus with red accent at left, elegant simple meal tray with rice/vegetables and water at foreground, subtle tools/maintenance element at right, on a single small rounded platform.
+Color palette: rich poppy red #f43229, ivory and charcoal.
+Style/medium: friendly rounded refined forms, isometric view, sophisticated soft shadows attached to objects only.
+Composition/framing: square canvas, all objects readable and fully contained.
+Scene/backdrop: isolated actual transparent background.
+Constraints: no people, writing, logos, UI or infographic labels. Preserve genuine alpha transparency.
+
+Asset: shared-living.png
+Transparent background: false
+Use case: photorealistic-natural
+Asset type: wide 3:2 editorial photograph for Arabic Aspar Residences workforce housing campaign website.
+Primary request: high quality editorial photograph of 3 adult migrant male workers of diverse South/Southeast Asian backgrounds relaxing together in a bright modern tidy shared residential lounge in Saudi Arabia, two seated, one casually standing, tea, natural candid smiles, dignified realistic depiction, no uniforms needed.
+Scene/backdrop: bright modern tidy residential lounge with ivory walls, daylight, tiny red furnishing accents.
+Lighting/mood: warm human campaign image, natural daylight.
+Composition/framing: wide 3:2 composition leaves unobtrusive space at upper left.
+Constraints: exactly three adults, realistic anatomy, no text or invented company logos.
+
+
+
+Logo: built-in image generation edit; preserve Aspar geometric mark, ASPAR / RESIDENCES / مساكن أسبار lockup, solid brand-red foreground, real transparent background, crisp clean edges.
