@@ -5,7 +5,7 @@
  const stage=document.querySelector('.story-stage');
  const image=document.querySelector('#story-image');
  const labels=['الإسكان','النقل','الإعاشة','إدارة المرافق'];
- const images=[['assets/room.jpg','غرفة مجهّزة في مساكن أسبار'],['assets/team.jpg','صورة من بروفايل أسبار لفريق العمالة مع حافلة'],['assets/kitchen.jpg','المطبخ المركزي وتجهيزات إعداد الوجبات'],['assets/corridor.jpg','ممرات منظمة تربط غرف مساكن أسبار']];
+ const images=[['assets/room.jpg','غرفة مجهّزة في مساكن أسبار'],['assets/team.jpg','صورة من بروفايل أسبار لفريق العمالة مع حافلة'],['assets/kitchen.jpg','المطبخ المركزي وتجهيزات إعداد الوجبات'],['assets/facilities-management.png','ممرات مساكن أسبار مع تجهيزات السلامة ومخرج الطوارئ']];
  let current=-1,manualUntil=0,frame=0;
  function activate(index){
   if(index===current)return;current=index;
