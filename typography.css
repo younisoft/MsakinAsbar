@@ -8,3 +8,7 @@
 :root{--font:"Thmanyah Serif Display",Tahoma,serif}
 html{font-family:var(--font)}
 input::placeholder,textarea::placeholder{font-family:var(--font)}
+
+@font-face{font-family:"ZAIN Mob";font-style:normal;font-weight:600;font-display:swap;src:url("assets/fonts/zain-mob-variable-600.ttf") format("truetype")}
+:root{--font-heading:"ZAIN Mob","Thmanyah Serif Display",Tahoma,serif}
+h1,h2,h3,h4,h5,h6{font-family:var(--font-heading);font-weight:600!important}
