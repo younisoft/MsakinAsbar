@@ -90,3 +90,7 @@ html{scroll-padding-top:116px}body{overflow-x:clip}.ui-icon{width:24px;height:24
 .shared-views button[aria-pressed="true"]{background:#f1f4e7;border-color:#899e51}
 .shared-views button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 @media(max-width:760px){.shared-views{padding:0 20px 20px}.shared-views button{font-size:11px}}
+
+/* Frame the resident from the waist up across the static and rotary layouts. */
+.resident-comfort .resident-portrait{overflow:hidden}
+.resident-comfort .resident-portrait>img{top:0;bottom:auto;left:0;width:100%;max-width:none;height:145%;object-fit:cover;object-position:center top;transform:none}
