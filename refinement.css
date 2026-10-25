@@ -110,3 +110,35 @@ html{scroll-padding-top:116px}body{overflow-x:clip}.ui-icon{width:24px;height:24
   }
   .hero-orbit .orbit-art{animation:orbitArrival 1.3s var(--ease) both,heroGentleFloatMobile 10s ease-in-out 1.3s infinite}
 }
+
+/* An original vector service illustration replaces the about photograph. */
+.about-visual.about-system{position:relative;isolation:isolate;width:100%;max-width:580px;aspect-ratio:580/480;margin:0 auto;min-width:0}
+.about-system:before{content:"";position:absolute;inset:11% 13% 13%;border-radius:50%;background:radial-gradient(circle,#e0e7c6 0%,#e7ecda 55%,transparent 72%);z-index:-1}
+.about-network{display:block;width:100%;height:100%;overflow:visible}
+.about-guide{stroke:#bdc9ad;stroke-width:1;stroke-dasharray:2 8;opacity:.7}
+.about-guide.inner{stroke-dasharray:none;opacity:.35}
+.about-route{stroke:#a8b68b;stroke-width:1.5;stroke-dasharray:4 12;stroke-linecap:round;opacity:.65}
+.about-spoke{stroke:#bdc9ad;stroke-width:1;stroke-dasharray:3 6}
+.about-service{position:absolute;display:flex;flex-direction:column;align-items:center;gap:10px;width:31%;text-align:center;transform:translate(-50%,-50%);color:var(--ink);font-size:16px;font-weight:700;line-height:1.5}
+.about-service-home{left:18%;top:24.5%;--node-fill:#f8f9ee;--node-stroke:#5e7747}
+.about-service-bus{left:82%;top:24.5%;--node-fill:#f5e9db;--node-stroke:#9e6e4e}
+.about-service-meal{left:18%;top:76%;--node-fill:#e2e9cf;--node-stroke:#5d7549}
+.about-service-care{left:82%;top:76%;--node-fill:#f7e1dc;--node-stroke:#c35144}
+.about-icon{display:grid;place-items:center;width:76px;height:76px;border:1px solid #fff;border-radius:24px;background:var(--node-fill);box-shadow:0 9px 22px #34483b0b,inset 0 0 0 5px #ffffff55}
+.about-icon svg{width:43px;height:43px;stroke:var(--node-stroke);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.about-system-caption{position:absolute;bottom:0;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:9px;white-space:nowrap;font-size:16px;font-weight:700;color:#55664b}
+.about-live-dot{width:7px;height:7px;border-radius:50%;background:#879d54;box-shadow:0 0 0 5px #879d5410}
+@keyframes aboutNodeFloat{0%,100%{translate:0 0}50%{translate:0 -5px}}
+@keyframes aboutRouteFlow{to{stroke-dashoffset:-64}}
+@keyframes aboutWarmWindow{0%,100%{fill:#e1e7b6}50%{fill:#f1daa2}}
+@media(prefers-reduced-motion:no-preference){
+.about-service .about-icon{animation:aboutNodeFloat 6s ease-in-out infinite}
+.about-service-bus .about-icon{animation-delay:-1.5s}
+.about-service-meal .about-icon{animation-delay:-3s}
+.about-service-care .about-icon{animation-delay:-4.5s}
+.about-route{animation:aboutRouteFlow 16s linear infinite}
+.about-window{animation:aboutWarmWindow 8s ease-in-out infinite}
+}
+@media(max-width:1050px){.about-service{font-size:14px;gap:8px}.about-icon{width:64px;height:64px;border-radius:21px}.about-icon svg{width:37px;height:37px}.about-system-caption{font-size:14px}}
+@media(max-width:760px){.about-visual.about-system{max-width:460px;margin:5px auto 0}.about-service{font-size:14px;gap:8px}.about-icon{width:62px;height:62px;border-radius:20px}.about-icon svg{width:35px;height:35px}.about-system-caption{font-size:15px}}
+@media(max-width:360px){.about-service{font-size:12px}.about-icon{width:54px;height:54px;border-radius:17px}.about-icon svg{width:32px;height:32px}.about-system-caption{font-size:14px}}
