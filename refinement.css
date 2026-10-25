@@ -94,3 +94,19 @@ html{scroll-padding-top:116px}body{overflow-x:clip}.ui-icon{width:24px;height:24
 /* Frame the resident from the waist up across the static and rotary layouts. */
 .resident-comfort .resident-portrait{overflow:hidden}
 .resident-comfort .resident-portrait>img{top:0;bottom:auto;left:0;width:100%;max-width:none;height:145%;object-fit:cover;object-position:center top;transform:none}
+
+/* A slow, restrained float, independent of the existing arrival transform. */
+@keyframes heroGentleFloat{
+  0%,100%{translate:0 0;rotate:0deg}
+  50%{translate:0 -12px;rotate:.65deg}
+}
+@media(prefers-reduced-motion:no-preference){
+  .hero-orbit .orbit-art{animation:orbitArrival 1.3s var(--ease) both,heroGentleFloat 9.6s ease-in-out 1.3s infinite}
+}
+@media(max-width:760px) and (prefers-reduced-motion:no-preference){
+  @keyframes heroGentleFloatMobile{
+    0%,100%{translate:0 0;rotate:0deg}
+    50%{translate:0 -8px;rotate:.4deg}
+  }
+  .hero-orbit .orbit-art{animation:orbitArrival 1.3s var(--ease) both,heroGentleFloatMobile 10s ease-in-out 1.3s infinite}
+}
