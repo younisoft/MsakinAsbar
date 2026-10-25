@@ -1,0 +1,10 @@
+/* Thmanyah Serif Display, served from the official Thmanyah website assets.
+   Source: https://font.thmanyah.com/ */
+@font-face{font-family:"Thmanyah Serif Display";font-style:normal;font-weight:300;font-display:swap;src:url("https://framerusercontent.com/assets/zmxf3YlIwMxBTz61cviQtq5n3zU.woff2") format("woff2")}
+@font-face{font-family:"Thmanyah Serif Display";font-style:normal;font-weight:400;font-display:swap;src:url("https://framerusercontent.com/assets/s1q2LvVNWBbqzMxMBxsexY73tE.woff2") format("woff2")}
+@font-face{font-family:"Thmanyah Serif Display";font-style:normal;font-weight:500;font-display:swap;src:url("https://framerusercontent.com/assets/ahIxG21c1088n0jA0bPQBjKu6M.woff2") format("woff2")}
+@font-face{font-family:"Thmanyah Serif Display";font-style:normal;font-weight:700;font-display:swap;src:url("https://framerusercontent.com/assets/AAY5hsAWwWmVC7qlScZUGjzCgE8.woff2") format("woff2")}
+@font-face{font-family:"Thmanyah Serif Display";font-style:normal;font-weight:900;font-display:swap;src:url("https://framerusercontent.com/assets/a9r2dKNoQcqFiTkwxTUnXgAfjws.woff2") format("woff2")}
+:root{--font:"Thmanyah Serif Display",Tahoma,serif}
+html{font-family:var(--font)}
+input::placeholder,textarea::placeholder{font-family:var(--font)}
