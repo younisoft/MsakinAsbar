@@ -77,3 +77,9 @@ html{scroll-padding-top:116px}body{overflow-x:clip}.ui-icon{width:24px;height:24
 .resident-card h3{font-size:19px}
 .resident-actions{margin-top:22px}
 }
+
+/* Keep the complete room composition visible in its responsive gallery frame. */
+.gallery-zoom:has(>img[src*="room-red-bedding"]){height:auto;aspect-ratio:3/2}
+.gallery-zoom>img[src*="room-red-bedding"],.gallery-zoom:hover>img[src*="room-red-bedding"]{object-fit:contain;scale:1}
+.service-photo:has(>img[src*="room-red-bedding"]){background:#e6ddce}
+.service-photo>img[src*="room-red-bedding"]{object-fit:contain;transform:none}
