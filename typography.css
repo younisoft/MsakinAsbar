@@ -9,8 +9,14 @@
 html{font-family:var(--font)}
 input::placeholder,textarea::placeholder{font-family:var(--font)}
 
-/* Restore Thmanyah and give text and controls a stronger, clearer weight. */
+/* Lyon headings with the established Thmanyah body text. */
 body{font-weight:500}
-h1,h2,h3,h4,h5,h6{font-family:var(--font);font-weight:900!important}
+@font-face{font-family:"Lyon Arabic Display";font-style:normal;font-weight:300;font-display:swap;src:url("assets/fonts/lyon-arabic-display-light.otf") format("opentype")}
+@font-face{font-family:"Lyon Arabic Display";font-style:normal;font-weight:400;font-display:swap;src:url("assets/fonts/lyon-arabic-display-regular.otf") format("opentype")}
+@font-face{font-family:"Lyon Arabic Display";font-style:normal;font-weight:500;font-display:swap;src:url("assets/fonts/lyon-arabic-display-medium.otf") format("opentype")}
+@font-face{font-family:"Lyon Arabic Display";font-style:normal;font-weight:700;font-display:swap;src:url("assets/fonts/lyon-arabic-display-bold.otf") format("opentype")}
+@font-face{font-family:"Lyon Arabic Display";font-style:normal;font-weight:900;font-display:swap;src:url("assets/fonts/lyon-arabic-display-black.otf") format("opentype")}
+:root{--font-heading:"Lyon Arabic Display","Thmanyah Serif Display",Tahoma,serif}
+h1,h2,h3,h4,h5,h6{font-family:var(--font-heading);font-weight:900!important}
 p,li,label,input,select,textarea{font-weight:500}
 button,.button,.text-link,.header nav,.eyebrow{font-weight:700}
