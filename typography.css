@@ -20,3 +20,13 @@ body{font-weight:500}
 h1,h2,h3,h4,h5,h6{font-family:var(--font-heading);font-weight:900!important}
 p,li,label,input,select,textarea{font-weight:500}
 button,.button,.text-link,.header nav,.eyebrow{font-weight:700}
+
+/* Numerals use Alexandria; Arabic and Latin letters retain the text font. */
+@font-face{font-family:"Aspar Numerals";font-style:normal;font-weight:400;font-display:swap;src:url("assets/fonts/alexandria-400.ttf") format("truetype");unicode-range:U+0030-0039,U+0660-0669,U+06F0-06F9}
+@font-face{font-family:"Aspar Numerals";font-style:normal;font-weight:500;font-display:swap;src:url("assets/fonts/alexandria-500.ttf") format("truetype");unicode-range:U+0030-0039,U+0660-0669,U+06F0-06F9}
+@font-face{font-family:"Aspar Numerals";font-style:normal;font-weight:600;font-display:swap;src:url("assets/fonts/alexandria-600.ttf") format("truetype");unicode-range:U+0030-0039,U+0660-0669,U+06F0-06F9}
+@font-face{font-family:"Aspar Numerals";font-style:normal;font-weight:700;font-display:swap;src:url("assets/fonts/alexandria-700.ttf") format("truetype");unicode-range:U+0030-0039,U+0660-0669,U+06F0-06F9}
+@font-face{font-family:"Aspar Numerals";font-style:normal;font-weight:800;font-display:swap;src:url("assets/fonts/alexandria-800.ttf") format("truetype");unicode-range:U+0030-0039,U+0660-0669,U+06F0-06F9}
+@font-face{font-family:"Aspar Numerals";font-style:normal;font-weight:900;font-display:swap;src:url("assets/fonts/alexandria-900.ttf") format("truetype");unicode-range:U+0030-0039,U+0660-0669,U+06F0-06F9}
+:root{--font:"Aspar Numerals","Lyon Arabic Display","Thmanyah Serif Display",Tahoma,serif;--font-heading:var(--font)}
+body{font-variant-numeric:lining-nums tabular-nums}

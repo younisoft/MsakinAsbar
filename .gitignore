@@ -1,3 +1,6 @@
 .DS_Store
 .design-backup/
 .vercel/
+generated_images/
+output/
+tmp/
