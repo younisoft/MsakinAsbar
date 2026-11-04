@@ -26,9 +26,19 @@
 - صفحة 404 غير قابلة للفهرسة، وإعداد إعادة توجيه `/index.html` إلى `/` في Vercel.
 - استبعاد أدوات التطوير والملاحظات والصور المولدة غير المستخدمة من حزمة النشر.
 
+## المشاركة في السوشيال ميديا (2026-11-04)
+
+- لكل صفحة صورة مشاركة خاصة بمقاس 1200×630 في `assets/share/` (الشعار، عنوان الصفحة، صورة الخدمة، النطاق)، مع `og:image:width/height/type/alt` و`twitter:image:alt`.
+- أيقونات حقيقية: `favicon.ico` و`favicon.svg` و`apple-touch-icon.png` و`icon-192/512.png` و`site.webmanifest` (يظهر الشعار بجانب الموقع في نتائج Google وعند الحفظ على الجوال).
+- تحويل `www.msakinasbar.com` إلى `msakinasbar.com` بتحويل دائم.
+- بيانات المنظمة: أسماء بديلة (Aspar Residences)، وصف، شعار بأبعاده، الرقمان الأساسيان، وقائمة الخدمات في الرئيسية. `lastmod` في خريطة الموقع.
+- لتعديل نصوص الصور: `scripts/build-share-images.py` ثم أعد التشغيل. عند تغيير الصور ارفع `UPDATED` في `scripts/build-seo.py` حتى تتجاوز المنصات النسخة المخزنة.
+- بعد تغيير صورة المشاركة: أعد جلب الرابط من [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) (يحدّث واتساب وفيسبوك وإنستغرام)، و[LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/).
+
 ## التحقق والتحديث
 
 ```sh
+python3 scripts/build-share-images.py
 python3 scripts/build-seo.py
 python3 scripts/check-seo.py
 node --check redesign.js

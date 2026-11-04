@@ -1,0 +1,16 @@
+{
+  "name": "مساكن أسبار",
+  "short_name": "أسبار",
+  "description": "سكن العمالة والنقل والإعاشة وإدارة المرافق للشركات",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#f7f7f3",
+  "theme_color": "#f43229",
+  "icons": [
+    {"src": "/icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "/icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml"}
+  ]
+}

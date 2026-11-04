@@ -100,14 +100,29 @@ def json_ld(graph):
     return '<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False).replace('<', '\\u003c') + '</script>'
 
 
+UPDATED = "2026-11-04"
 ORG = {"@type": "Organization", "@id": ORIGIN + "/#organization", "name": NAME,
-       "url": ORIGIN + "/", "logo": ORIGIN + "/assets/logo-transparent.png",
+       "alternateName": ["Aspar Residences", "مساكن اسبار", "أسبار للسكن"],
+       "description": "مساكن أسبار شركة متخصصة في توفير وتشغيل سكن العمالة للشركات، مع النقل والإعاشة وإدارة المرافق عبر جهة واحدة.",
+       "slogan": "راحتهم مسؤوليتنا، وثقتك أولويتنا",
+       "url": ORIGIN + "/",
+       "logo": {"@type": "ImageObject", "url": ORIGIN + "/assets/logo-transparent.png", "width": 1254, "height": 1254},
+       "image": ORIGIN + "/assets/share/home.jpg",
        "email": "info@msakinasbar.com", "telephone": "+966500558677",
-       "contactPoint": [{"@type": "ContactPoint", "telephone": "+966500558677", "contactType": "customer service", "availableLanguage": "ar"}]}
+       "knowsAbout": ["سكن العمالة", "سكن عمال للشركات", "نقل العمالة", "إعاشة العمالة", "إدارة المرافق"],
+       "contactPoint": [{"@type": "ContactPoint", "telephone": "+966500558677", "contactType": "sales", "availableLanguage": ["ar", "en"]},
+                        {"@type": "ContactPoint", "telephone": "+966557011839", "contactType": "customer service", "availableLanguage": ["ar", "en"]}]}
+
+ICONS = """<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">"""
 
 
-def metadata(title, description, path="/", image="room-red-bedding.jpg", article=False):
+def metadata(title, description, path="/", share="home", article=False, alt=None):
     url = ORIGIN + path
+    image = f"{ORIGIN}/assets/share/{share}.jpg?v={UPDATED.replace('-', '')}"
+    alt = escape(alt or title, quote=True)
     return f'''<!-- seo:start -->
 <title>{escape(title)}</title>
 <meta name="description" content="{escape(description, quote=True)}">
@@ -119,12 +134,17 @@ def metadata(title, description, path="/", image="room-red-bedding.jpg", article
 <meta property="og:title" content="{escape(title, quote=True)}">
 <meta property="og:description" content="{escape(description, quote=True)}">
 <meta property="og:url" content="{url}">
-<meta property="og:image" content="{ORIGIN}/assets/{image}">
-<meta property="og:image:alt" content="غرفة سكن مجهزة في مساكن أسبار">
+<meta property="og:image" content="{image}">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{alt}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{escape(title, quote=True)}">
 <meta name="twitter:description" content="{escape(description, quote=True)}">
-<meta name="twitter:image" content="{ORIGIN}/assets/{image}">
+<meta name="twitter:image" content="{image}">
+<meta name="twitter:image:alt" content="{alt}">
+{ICONS}
 <!-- seo:end -->'''
 
 
@@ -141,10 +161,12 @@ def build_home():
     html = path.read_text()
     html = re.sub(r'<!-- seo:start -->.*?<!-- seo:end -->\s*', '', html, flags=re.S)
     html = re.sub(r'<title>.*?</title>\s*|<meta name="description"[^>]*>\s*', '', html)
-    html = html.replace('<meta name="theme-color"', metadata('مساكن أسبار | سكن العمالة والنقل والإعاشة للشركات', 'مساكن أسبار: سكن العمالة للشركات، نقل، إعاشة وإدارة مرافق عبر جهة واحدة. غرف مجهزة وخدمات حسب احتياج مشروعك. حدّد الموقع والعدد واطلب عرضك.') + '\n<meta name="theme-color"', 1)
+    html = html.replace('<meta name="theme-color"', metadata('مساكن أسبار | سكن العمالة والنقل والإعاشة للشركات', 'مساكن أسبار: سكن العمالة للشركات، نقل، إعاشة وإدارة مرافق عبر جهة واحدة. غرف مجهزة وخدمات حسب احتياج مشروعك. حدّد الموقع والعدد واطلب عرضك.', alt='مساكن أسبار — راحتهم مسؤوليتنا، وثقتك أولويتنا') + '\n<meta name="theme-color"', 1)
     html = re.sub(r'<script type="application/ld\+json">.*?</script>\s*', '', html, flags=re.S)
+    html = re.sub(r'<link rel="icon" type="image/svg\+xml" href="data:[^"]*">\s*', '', html)
     graph = [ORG, {"@type": "WebSite", "@id": ORIGIN + '/#website', "url": ORIGIN + '/', "name": NAME, "inLanguage": "ar", "publisher": {"@id": ORIGIN + '/#organization'}},
-             {"@type": "WebPage", "@id": ORIGIN + '/#webpage', "url": ORIGIN + '/', "name": "مساكن أسبار | سكن العمالة والنقل والإعاشة للشركات", "inLanguage": "ar", "isPartOf": {"@id": ORIGIN + '/#website'}, "about": {"@id": ORIGIN + '/#organization'}}]
+             {"@type": "WebPage", "@id": ORIGIN + '/#webpage', "url": ORIGIN + '/', "name": "مساكن أسبار | سكن العمالة والنقل والإعاشة للشركات", "inLanguage": "ar", "isPartOf": {"@id": ORIGIN + '/#website'}, "about": {"@id": ORIGIN + '/#organization'}, "dateModified": UPDATED, "primaryImageOfPage": {"@type": "ImageObject", "url": ORIGIN + '/assets/share/home.jpg', "width": 1200, "height": 630}},
+             {"@type": "ItemList", "name": "خدمات مساكن أسبار", "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": p["name"], "url": ORIGIN + page_url(p)} for i, p in enumerate(PAGES[:4])]}]
     html = html.replace('</head>', json_ld(graph) + '\n</head>', 1)
     html = re.sub(r'<!-- services-links:start -->.*?<!-- services-links:end -->', '', html, flags=re.S)
     block = '<!-- services-links:start --><div class="seo-services-links" aria-label="تفاصيل خدمات مساكن أسبار">' + service_links() + '</div><p class="seo-guide-link">تجهّز سكنًا لفريقك؟ <a href="/guides/choosing-worker-accommodation/">اقرأ دليل اختيار سكن العمالة للشركات ←</a></p><!-- services-links:end -->'
@@ -159,15 +181,14 @@ def build_page(p):
     if p['type'] == 'Service':
         entity.update({"serviceType": p['name'], "provider": {"@id": ORIGIN + '/#organization'}})
     else:
-        entity.update({"inLanguage": "ar", "headline": p['name'], "author": {"@id": ORIGIN + '/#organization'}, "publisher": {"@id": ORIGIN + '/#organization'}, "image": ORIGIN + '/assets/room-red-bedding.jpg', "datePublished": "2026-10-27", "dateModified": "2026-10-27", "mainEntityOfPage": url})
+        entity.update({"inLanguage": "ar", "headline": p['name'], "author": {"@id": ORIGIN + '/#organization'}, "publisher": {"@id": ORIGIN + '/#organization'}, "image": ORIGIN + '/assets/share/' + p['slug'] + '.jpg', "datePublished": "2026-10-27", "dateModified": UPDATED, "mainEntityOfPage": url})
     sections = ''.join(f'<section><h2>{escape(h)}</h2><p>{escape(t)}</p></section>' for h, t in p['sections'])
     faq = ''.join(f'<details><summary>{escape(q)}</summary><p>{escape(a)}</p></details>' for q, a in p['faq'])
     checks = ''.join(f'<li>{escape(c)}</li>' for c in p['checks'])
     html = f'''<!DOCTYPE html>
 <html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-{metadata(p['title'], p['description'], page_url(p), article=p['type'] == 'Article')}
+{metadata(p['title'], p['description'], page_url(p), share=p['slug'], article=p['type'] == 'Article', alt=p['name'] + ' — ' + NAME)}
 <meta name="theme-color" content="#f43229">
-<link rel="icon" href="/assets/logo-transparent.webp" type="image/webp">
 <link rel="preload" href="/assets/fonts/lyon-arabic-display-black.otf" as="font" type="font/otf" crossorigin>
 <link rel="stylesheet" href="/typography.css?v=numerals-1"><link rel="stylesheet" href="/seo-pages.css?v=1">
 {json_ld([ORG, crumbs, entity])}
@@ -188,7 +209,7 @@ if __name__ == '__main__':
     for page in PAGES:
         build_page(page)
     urls = [ORIGIN + '/'] + [ORIGIN + page_url(p) for p in PAGES]
-    sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + '\n'.join('  <url><loc>' + escape(url) + '</loc></url>' for url in urls) + '\n</urlset>\n'
+    sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + '\n'.join('  <url><loc>' + escape(url) + '</loc><lastmod>' + UPDATED + '</lastmod></url>' for url in urls) + '\n</urlset>\n'
     (ROOT / 'sitemap.xml').write_text(sitemap)
     (ROOT / 'robots.txt').write_text('User-agent: *\nAllow: /\n\nSitemap: ' + ORIGIN + '/sitemap.xml\n')
     print('Generated home metadata, 4 service pages, 1 guide, sitemap.xml and robots.txt.')
