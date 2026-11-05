@@ -35,9 +35,19 @@
 - لتعديل نصوص الصور: `scripts/build-share-images.py` ثم أعد التشغيل. عند تغيير الصور ارفع `UPDATED` في `scripts/build-seo.py` حتى تتجاوز المنصات النسخة المخزنة.
 - بعد تغيير صورة المشاركة: أعد جلب الرابط من [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) (يحدّث واتساب وفيسبوك وإنستغرام)، و[LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/).
 
+## النسخة الإنجليزية (2026-11-05)
+
+- المسارات: `/en/` و`/en/services/...` و`/en/guides/...`، كل صفحة مرتبطة بنظيرتها العربية عبر `hreflang` (ar / en / x-default = العربية) وفي `sitemap.xml`.
+- الصفحة الرئيسية الإنجليزية `en/index.html` مكتوبة يدويًا. نصوص صفحات الخدمات والدليل في `scripts/seo_en.py`.
+- التنسيق: `scripts/build-ltr-css.py` يولّد نسخًا معكوسة `*.ltr.css` من ملفات CSS العربية. لا تعدّلها يدويًا؛ أعد التوليد بعد أي تعديل في CSS العربي. التصحيحات الخاصة بالإنجليزية في `en.css`.
+- `redesign.js` و`resident-dial.js` يقرآن لغة الصفحة ويعرضان النصوص ورسالة واتساب بالإنجليزية.
+- صور مشاركة إنجليزية: `assets/share/en-*.jpg`.
+- البروفايل PDF متوفر بالعربية فقط، والرابط في النسخة الإنجليزية مكتوب عليه (Arabic).
+
 ## التحقق والتحديث
 
 ```sh
+python3 scripts/build-ltr-css.py
 python3 scripts/build-share-images.py
 python3 scripts/build-seo.py
 python3 scripts/check-seo.py

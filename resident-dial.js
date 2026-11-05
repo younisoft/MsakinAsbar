@@ -8,6 +8,7 @@ function advanceDial(position,velocity,target,dt){
   const decay=Math.exp(-frequency*dt);
   return {position:target+(offset+impulse)*decay,velocity:(velocity-frequency*impulse)*decay};
 }
+const EN=document.documentElement.lang==='en';
 const section=document.querySelector('#resident-comfort');
 if(!section)return;
 const deck=section.querySelector('.resident-deck');
@@ -80,12 +81,12 @@ function enable(){
   deck.before(track);track.append(stage);stage.append(deck);
   ring=document.createElement('div');ring.className='resident-dial-ring';ring.setAttribute('aria-hidden','true');deck.prepend(ring);
   controls=document.createElement('div');controls.className='resident-dial-controls';
-  const hint=document.createElement('p');hint.textContent='مرّر لتكتشف التفاصيل';
+  const hint=document.createElement('p');hint.textContent=EN?'Scroll to explore the details':'مرّر لتكتشف التفاصيل';
   counter=document.createElement('span');counter.className='resident-dial-counter';counter.dir='ltr';
-  const nav=document.createElement('div');nav.className='resident-dial-buttons';nav.setAttribute('role','group');nav.setAttribute('aria-label','اختيار تفاصيل السكن');
+  const nav=document.createElement('div');nav.className='resident-dial-buttons';nav.setAttribute('role','group');nav.setAttribute('aria-label',EN?'Choose a residence detail':'اختيار تفاصيل السكن');
   buttons=cards.map((card,i)=>{
     const button=document.createElement('button');button.type='button';button.textContent=`0${i+1}`;
-    button.setAttribute('aria-label','عرض '+card.querySelector('h3').innerText.replace(/\s+/g,' ').trim());
+    button.setAttribute('aria-label',(EN?'Show ':'عرض ')+card.querySelector('h3').innerText.replace(/\s+/g,' ').trim());
     button.setAttribute('aria-pressed',String(i===0));
     button.addEventListener('click',()=>choose(i));nav.append(button);return button;
   });

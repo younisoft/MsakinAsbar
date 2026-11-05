@@ -56,7 +56,7 @@ def main():
 
     sitemap = ET.parse(ROOT / 'sitemap.xml')
     urls = [n.text for n in sitemap.findall('.//{http://www.sitemaps.org/schemas/sitemap/0.9}loc')]
-    check(len(urls) == 6 and len(set(urls)) == 6, 'Expected six unique sitemap URLs')
+    check(len(urls) == 12 and len(set(urls)) == 12, 'Expected twelve unique sitemap URLs (6 Arabic + 6 English)')
     check('Sitemap: ' + ORIGIN + '/sitemap.xml' in (ROOT / 'robots.txt').read_text(), 'Missing sitemap in robots.txt')
     check('Disallow: /\n' not in (ROOT / 'robots.txt').read_text(), 'Production crawling is blocked')
     documents = {}
@@ -71,7 +71,12 @@ def main():
         check(len(p.find('title')) == 1, path + ': title must be unique')
         check(len(p.find('h1')) == 1, path + ': expected one h1')
         check(len(p.ids) == len(set(p.ids)), path + ': duplicate IDs')
-        check(p.find('html', lang='ar', dir='rtl'), path + ': Arabic/RTL missing')
+        english = path.startswith('/en/')
+        check(p.find('html', lang='en', dir='ltr') if english else p.find('html', lang='ar', dir='rtl'), path + ': wrong lang/dir')
+        twin = path[3:] if english else '/en' + path
+        for lang, target in (('ar', twin if english else path), ('en', path if english else twin), ('x-default', twin if english else path)):
+            check(p.find('link', rel='alternate', hreflang=lang, href=ORIGIN + target), path + ': missing hreflang ' + lang)
+        check(resolve(twin).is_file(), path + ': missing translated page ' + twin)
         check(len(p.find('meta', name='description')) == 1, path + ': description missing or duplicated')
         check(p.find('link', rel='canonical', href=url), path + ': wrong canonical')
         check(p.find('meta', property='og:url', content=url), path + ': wrong sharing URL')
@@ -111,7 +116,7 @@ def main():
     if errors:
         print('\n'.join('FAIL ' + e for e in errors))
         raise SystemExit(1)
-    print('PASS: 6 indexable pages; unique titles, descriptions, canonical URLs and H1s; valid JSON-LD; sitemap; robots; image dimensions; all internal links and anchors; non-indexable 404.')
+    print('PASS: 12 indexable pages (Arabic + English) with reciprocal hreflang; unique titles, descriptions, canonical URLs and H1s; valid JSON-LD; sitemap; robots; image dimensions; all internal links and anchors; non-indexable 404.')
     if not base:
         print('Static validation only. Live status codes, redirects, headers and search indexing require deployment checks.')
 

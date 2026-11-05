@@ -1,0 +1,153 @@
+"""Mirror the Arabic (RTL) stylesheets into LTR copies for the English site.
+
+Run after any change to the Arabic CSS:  python3 scripts/build-ltr-css.py
+Writes <name>.ltr.css next to each source file so relative font/image URLs
+keep working. Hand-written English fixes live in en.css (not generated).
+"""
+from pathlib import Path
+import re
+
+ROOT = Path(__file__).resolve().parents[1]
+SOURCES = ["styles.css", "experience.css", "refinement.css", "typography.css", "seo.css", "life.css", "seo-pages.css"]
+
+SWAP_WORD_PROPS = {"text-align", "float", "clear", "transform-origin", "background-position", "object-position",
+                   "justify-self", "justify-content", "justify-items"}
+FOUR_SIDE_PROPS = {"margin", "padding", "inset", "border-width", "border-color", "border-style", "scroll-padding"}
+
+
+def swap_words(text):
+    return re.sub(r"\b(left|right)\b", lambda m: "right" if m.group(1) == "left" else "left", text)
+
+
+def negate(num):
+    num = num.strip()
+    if num in ("0", "0px", "0%"):
+        return num
+    return num[1:] if num.startswith("-") else "-" + num
+
+
+def split_top(value, sep=None):
+    """Split on whitespace (or sep) outside parentheses."""
+    parts, depth, cur = [], 0, ""
+    for ch in value:
+        if ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+        if depth == 0 and ((sep is None and ch.isspace()) or ch == sep):
+            if cur.strip():
+                parts.append(cur.strip())
+            cur = ""
+            continue
+        cur += ch
+    if cur.strip():
+        parts.append(cur.strip())
+    return parts
+
+
+def mirror_transform(value):
+    value = re.sub(r"translateX\(\s*([^)]+)\)", lambda m: f"translateX({negate(m.group(1))})", value)
+
+    def tr(m):
+        args = split_top(m.group(1), ",")
+        if args:
+            args[0] = negate(args[0])
+        return "translate(" + ",".join(args) + ")"
+    value = re.sub(r"translate\(([^()]+)\)", tr, value)
+    value = re.sub(r"translate3d\(([^,]+),", lambda m: f"translate3d({negate(m.group(1))},", value)
+    return value
+
+
+def mirror_gradients(value):
+    value = re.sub(r"\bto (left|right)\b", lambda m: "to " + ("right" if m.group(1) == "left" else "left"), value)
+    return re.sub(r"(linear-gradient\(\s*)(-?[\d.]+)deg",
+                  lambda m: f"{m.group(1)}{(360 - float(m.group(2))) % 360:g}deg", value)
+
+
+def mirror_decl(prop, value):
+    p = prop.strip()
+    low = p.lower()
+    if low.startswith("--") or low in ("direction", "writing-mode"):
+        return p, value
+    new_prop = swap_words(p)
+    important = ""
+    m = re.search(r"\s*!important\s*$", value)
+    if m:
+        important, value = value[m.start():], value[:m.start()]
+    if low in SWAP_WORD_PROPS:
+        value = swap_words(value)
+    elif low in FOUR_SIDE_PROPS:
+        parts = split_top(value)
+        if len(parts) == 4:
+            parts[1], parts[3] = parts[3], parts[1]
+            value = " ".join(parts)
+    elif low == "border-radius" and "/" not in value:
+        parts = split_top(value)
+        if len(parts) == 4:
+            a, b, c, d = parts
+            value = f"{b} {a} {d} {c}"
+        elif len(parts) == 3:
+            a, b, c = parts
+            value = f"{b} {a} {b} {c}"
+        elif len(parts) == 2:
+            value = f"{parts[1]} {parts[0]}"
+    elif low == "transform":
+        value = mirror_transform(value)
+    elif low == "translate":
+        parts = split_top(value)
+        if parts:
+            parts[0] = negate(parts[0])
+            value = " ".join(parts)
+    if "gradient(" in value:
+        value = mirror_gradients(value)
+    return new_prop, value + important
+
+
+def split_decls(body):
+    out, depth, quote, cur = [], 0, None, ""
+    for ch in body:
+        if quote:
+            if ch == quote:
+                quote = None
+        elif ch in "\"'":
+            quote = ch
+        elif ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+        elif ch == ";" and depth == 0:
+            out.append(cur)
+            cur = ""
+            continue
+        cur += ch
+    out.append(cur)
+    return out
+
+
+def mirror_body(body):
+    decls = []
+    for d in split_decls(body):
+        if ":" not in d or not d.strip():
+            decls.append(d)
+            continue
+        prop, value = d.split(":", 1)
+        if not re.fullmatch(r"\s*-?[a-zA-Z-]+\s*", prop):
+            decls.append(d)
+            continue
+        np, nv = mirror_decl(prop, value)
+        decls.append(f"{np}:{nv}")
+    return ";".join(decls)
+
+
+def mirror_css(css):
+    css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+    # @font-face bodies contain url() etc. but no left/right; innermost blocks only.
+    return re.sub(r"\{([^{}]*)\}", lambda m: "{" + mirror_body(m.group(1)) + "}", css)
+
+
+if __name__ == "__main__":
+    for name in SOURCES:
+        src = ROOT / name
+        out = src.with_name(src.stem + ".ltr.css")
+        out.write_text("/* GENERATED by scripts/build-ltr-css.py from " + name + " — do not edit. */\n" + mirror_css(src.read_text()))
+    print("Mirrored", len(SOURCES), "stylesheets to *.ltr.css")

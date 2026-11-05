@@ -1,0 +1,14 @@
+/* Hand-written fixes for the English (LTR) pages; loaded after the mirrored *.ltr.css files.
+   Arabic needs tall line-heights for its ascenders/descenders; Latin text does not. */
+html[lang="en"] body{line-height:1.6}
+html[lang="en"] body p,html[lang="en"] body li,html[lang="en"] body summary,html[lang="en"] body label{line-height:1.6!important}
+html[lang="en"] body h1,html[lang="en"] body h2,html[lang="en"] body h3{line-height:1.12!important;letter-spacing:-.015em}
+html[lang="en"] .hero-orbit .hero-copy h1{font-size:clamp(42px,4.6vw,76px);margin:22px 0 22px}
+html[lang="en"] .hero-orbit .hero-title-line,html[lang="en"] .hero-orbit .outline-word{padding-bottom:.08em}
+@media(max-width:760px){html[lang="en"] .hero-orbit .hero-copy h1{font-size:clamp(34px,9.4vw,50px)}}
+/* The dial script centres cards with translate(-50%) from the left edge. */
+html[lang="en"] .has-rotary .resident-card,html[lang="en"] .resident-dial-ring{left:50%;right:auto}
+/* Arrow on the hero card points up-right in LTR. */
+html[lang="en"] .orbit-link>span:last-child .ui-icon{transform:rotate(-45deg)}
+/* Reading progress grows from the left. */
+html[lang="en"] .reading-progress span{transform-origin:left}

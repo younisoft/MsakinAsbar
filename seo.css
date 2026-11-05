@@ -9,3 +9,9 @@
 html.no-js .service-panel[hidden]{display:block!important}
 html.no-js .service-panel{margin-bottom:32px}
 html.no-js .service-tabs{display:none}
+/* Language switch (Arabic <-> English). */
+.header-actions{display:flex;align-items:center;gap:14px}
+.lang-switch{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:999px;font-size:15px;font-weight:700;line-height:1;transition:background .2s,border-color .2s}
+.lang-switch:hover{background:#fff;border-color:#c9cdc2}
+.lang-switch[lang="en"]{font-family:var(--font)}
+@media(max-width:480px){.header-actions{gap:8px}.lang-switch{padding:0 11px;font-size:13px}}
