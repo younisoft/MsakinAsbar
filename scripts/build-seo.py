@@ -187,7 +187,7 @@ def pages(lang):
 
 def footer_styles(html):
     if 'href="/footer.css' not in html:
-        html = html.replace("</head>", '<link rel="stylesheet" href="/footer.css?v=3">\n</head>', 1)
+        html = html.replace("</head>", '<link rel="stylesheet" href="/footer.css?v=4">\n</head>', 1)
     return html
 
 
