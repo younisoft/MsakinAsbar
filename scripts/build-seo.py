@@ -10,7 +10,9 @@ import re
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from site_footer import render_footer
 import seo_en as EN  # noqa: E402
+import seo_legal as LEGAL  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 ORIGIN = "https://msakinasbar.com"
@@ -108,10 +110,13 @@ UPDATED = "2026-11-05"
 ORG = {"@type": "Organization", "@id": ORIGIN + "/#organization", "name": NAME,
        "alternateName": ["Aspar Residences", "مساكن اسبار", "أسبار للسكن"],
        "description": "مساكن أسبار شركة متخصصة في توفير وتشغيل سكن العمالة للشركات، مع النقل والإعاشة وإدارة المرافق عبر جهة واحدة.",
-       "slogan": "راحتهم مسؤوليتنا، وثقتك أولويتنا",
+       "slogan": "راحتهم مسؤوليتنا",
        "url": ORIGIN + "/",
        "logo": {"@type": "ImageObject", "url": ORIGIN + "/assets/logo-transparent.png", "width": 1254, "height": 1254},
        "image": ORIGIN + "/assets/share/home.jpg",
+       "legalName": LEGAL.LEGAL_NAME,
+       "identifier": [{"@type": "PropertyValue", "propertyID": "Saudi Commercial Registration", "value": LEGAL.CR},
+                      {"@type": "PropertyValue", "propertyID": "Saudi Unified Number", "value": LEGAL.UNIFIED}],
        "email": "info@msakinasbar.com", "telephone": "+966500558677",
        "knowsAbout": ["سكن العمالة", "سكن عمال للشركات", "نقل العمالة", "إعاشة العمالة", "إدارة المرافق",
                       "Worker accommodation", "Labour accommodation", "Staff transport", "Workforce catering", "Facilities management"],
@@ -119,7 +124,7 @@ ORG = {"@type": "Organization", "@id": ORIGIN + "/#organization", "name": NAME,
                         {"@type": "ContactPoint", "telephone": "+966557011839", "contactType": "customer service", "availableLanguage": ["ar", "en"]}]}
 ORG_EN = dict(ORG, name=EN.NAME, alternateName=[NAME, "مساكن اسبار", "Aspar"],
               description="Aspar Residences provides and operates worker accommodation for companies, with transport, catering and facilities management through one partner.",
-              slogan="Their comfort is our responsibility, your trust is our priority")
+              slogan="Their comfort is our responsibility")
 
 ICONS = """<link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -180,6 +185,12 @@ def pages(lang):
     return PAGES if lang == "ar" else EN.PAGES
 
 
+def footer_styles(html):
+    if 'href="/footer.css' not in html:
+        html = html.replace("</head>", '<link rel="stylesheet" href="/footer.css?v=3">\n</head>', 1)
+    return html
+
+
 def service_links(lang="ar"):
     arrow = ' ←' if lang == "ar" else ' →'
     return ''.join(f'<a href="{PREFIX[lang]}{page_url(p)}">{p["name"]}<span aria-hidden="true">{arrow}</span></a>' for p in pages(lang)[:4])
@@ -191,7 +202,7 @@ def build_home(lang="ar"):
     org = ORG if lang == "ar" else ORG_EN
     if lang == "ar":
         title = 'مساكن أسبار | سكن العمالة والنقل والإعاشة للشركات'
-        meta = metadata(title, 'مساكن أسبار: سكن العمالة للشركات، نقل، إعاشة وإدارة مرافق عبر جهة واحدة. غرف مجهزة وخدمات حسب احتياج مشروعك. حدّد الموقع والعدد واطلب عرضك.', alt='مساكن أسبار — راحتهم مسؤوليتنا، وثقتك أولويتنا')
+        meta = metadata(title, 'مساكن أسبار: سكن العمالة للشركات، نقل، إعاشة وإدارة مرافق عبر جهة واحدة. غرف مجهزة وخدمات حسب احتياج مشروعك. حدّد الموقع والعدد واطلب عرضك.', alt='مساكن أسبار — راحتهم مسؤوليتنا')
         list_name, label = "خدمات مساكن أسبار", "تفاصيل خدمات مساكن أسبار"
         guide = '<p class="seo-guide-link">تجهّز سكنًا لفريقك؟ <a href="/guides/choosing-worker-accommodation/">اقرأ دليل اختيار سكن العمالة للشركات ←</a></p>'
     else:
@@ -212,6 +223,11 @@ def build_home(lang="ar"):
     html = re.sub(r'<!-- services-links:start -->.*?<!-- services-links:end -->', '', html, flags=re.S)
     block = f'<!-- services-links:start --><div class="seo-services-links" aria-label="{label}">' + service_links(lang) + '</div>' + guide + '<!-- services-links:end -->'
     html = html.replace('<div class="service-footnote">', block + '<div class="service-footnote">', 1)
+    html = re.sub(r'<div class="closing-line"[^>]*>.*?</div>', "", html, flags=re.S)
+    closing = 'مكان يليق بفريقك' if lang == 'ar' else 'A place for your people'
+    closing = f'<div class="closing-line" aria-hidden="true">{closing}<span>.</span></div>'
+    html = re.sub(r"<footer\b[^>]*>.*?</footer>", closing + render_footer(lang), html, flags=re.S)
+    html = footer_styles(html)
     path.write_text(html)
 
 
@@ -234,10 +250,10 @@ def build_page(p, lang="ar"):
     other = ('/en' if ar else '') + page_url(p)
     if ar:
         t = dict(skip="انتقل إلى المحتوى", home_label="مساكن أسبار — الرئيسية", menu="القائمة الرئيسية", services="خدماتنا", about="عن أسبار", quote="اطلب عرضك", breadcrumb="مسار التصفح", home="الرئيسية", kicker='دليل للشركات' if p['type'] == 'Article' else 'خدماتنا', cta="جهّز احتياج فريقك ←", faq_title='أسئلة عن ' + ('اختيار السكن' if p['type'] == 'Article' else p['name']), before="قبل طلب العرض", before_sub="تفاصيل بسيطة. وعرض أوضح.", contact="تواصل مع فريقنا", related_kicker="شريك واحد. خدمات مترابطة.", related="اكتشف خدمات مساكن أسبار", guide_link="دليل اختيار سكن العمالة للشركات ←", footer="مساكن أسبار · راحتهم مسؤوليتنا.", back="العودة للرئيسية ←", switch='<a href="' + other + '" hreflang="en" lang="en">English</a>', site=NAME)
-        css = '<link rel="stylesheet" href="/typography.css?v=numerals-1"><link rel="stylesheet" href="/seo-pages.css?v=1">'
+        css = '<link rel="stylesheet" href="/typography.css?v=numerals-1"><link rel="stylesheet" href="/seo-pages.css?v=2">'
     else:
         t = dict(U, kicker=U['guide_kicker'] if p['type'] == 'Article' else U['services_kicker'], faq_title=U['faq_about'] + ' ' + (U['faq_guide'] if p['type'] == 'Article' else p['name'][0].lower() + p['name'][1:]), switch='<a href="' + other + '" hreflang="ar" lang="ar" aria-label="' + U['switch_label'] + '">' + U['switch'] + '</a>', site=EN.NAME)
-        css = '<link rel="stylesheet" href="/typography.ltr.css?v=en-1"><link rel="stylesheet" href="/seo-pages.ltr.css?v=en-1"><link rel="stylesheet" href="/en.css?v=1">'
+        css = '<link rel="stylesheet" href="/typography.ltr.css?v=en-1"><link rel="stylesheet" href="/seo-pages.ltr.css?v=en-2"><link rel="stylesheet" href="/en.css?v=1">'
     html = f"""<!DOCTYPE html>
 <html lang="{lang}" dir="{'rtl' if ar else 'ltr'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 {metadata(p['title'], p['description'], page_url(p), share=p['slug'], article=p['type'] == 'Article', alt=p['name'] + ' — ' + t['site'], lang=lang)}
@@ -251,14 +267,56 @@ def build_page(p, lang="ar"):
 <div class="detail-hero"><div><span class="eyebrow">{t['site']} · {t['kicker']}</span><h1>{p['name']}</h1><p>{p['intro']}</p><a class="button" href="{pre}/#plan">{t['cta']}</a></div><img src="/assets/{p['image']}" width="768" height="560" alt="{p['alt']}" fetchpriority="high"></div>
 <div class="detail-layout"><article class="detail-copy">{sections}<section class="detail-faq"><h2>{t['faq_title']}</h2>{faq}</section></article><aside class="detail-checklist"><h2>{t['before']}</h2><p>{t['before_sub']}</p><ul>{checks}</ul><a class="button" href="{pre}/#contact">{t['contact']}</a><a class="phone" href="tel:+966500558677" dir="ltr">+966 50 055 8677</a></aside></div>
 <section class="related"><span class="eyebrow">{t['related_kicker']}</span><h2>{t['related']}</h2><div class="related-links">{service_links(lang)}</div><a class="guide-link" href="{pre}/guides/choosing-worker-accommodation/">{t['guide_link']}</a></section></main>
-<footer><p>{t['footer']}</p><a href="mailto:info@msakinasbar.com">info@msakinasbar.com</a><a href="{pre}/">{t['back']}</a></footer></body></html>"""
+{legal_footer(lang)}</body></html>"""
     out = ROOT / (pre + page_url(p)).strip('/') / 'index.html'
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(html)
+    out.write_text(footer_styles(html))
+
+
+def legal_footer(lang):
+    return render_footer(lang)
+
+
+def build_legal(p, lang="ar"):
+    ar = lang == "ar"
+    pre = PREFIX[lang]
+    path = '/' + p['slug'] + '/'
+    url = ORIGIN + pre + path
+    home = ORIGIN + pre + '/'
+    org = ORG if ar else ORG_EN
+    L = LEGAL.UI[lang]
+    t = dict(skip="انتقل إلى المحتوى", home_label="مساكن أسبار — الرئيسية", menu="القائمة الرئيسية", services="خدماتنا", about="عن أسبار", quote="اطلب عرضك", breadcrumb="مسار التصفح", home="الرئيسية", contact="تواصل مع فريقنا", site=NAME) if ar else dict(EN.UI, site=EN.NAME)
+    other = ('/en' if ar else '') + path
+    switch = (f'<a href="{other}" hreflang="en" lang="en">English</a>' if ar
+              else f'<a href="{other}" hreflang="ar" lang="ar" aria-label="{EN.UI["switch_label"]}">{EN.UI["switch"]}</a>')
+    css = ('<link rel="stylesheet" href="/typography.css?v=numerals-1"><link rel="stylesheet" href="/seo-pages.css?v=2">' if ar
+           else '<link rel="stylesheet" href="/typography.ltr.css?v=en-1"><link rel="stylesheet" href="/seo-pages.ltr.css?v=en-2"><link rel="stylesheet" href="/en.css?v=1">')
+    crumbs = {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": t['home'], "item": home}, {"@type": "ListItem", "position": 2, "name": p['name'], "item": url}]}
+    webpage = {"@type": "WebPage", "@id": url + '#webpage', "url": url, "name": p['title'], "description": p['description'], "inLanguage": lang, "dateModified": LEGAL.UPDATED, "publisher": {"@id": ORIGIN + '/#organization'}}
+    def section(h, intro, bullets):
+        body = (f'<p>{escape(intro)}</p>' if intro else '') + ('<ul>' + ''.join(f'<li>{escape(b)}</li>' for b in bullets) + '</ul>' if bullets else '')
+        return f'<section><h2>{escape(h)}</h2>{body}</section>'
+    sections = ''.join(section(*s) for s in p['sections'])
+    toc = ''.join(f'<a href="{pre}/{slug}/"' + (' aria-current="page"' if slug == p['slug'] else '') + f'>{label}</a>' for slug, label in L['links'])
+    html = f"""<!DOCTYPE html>
+<html lang="{lang}" dir="{'rtl' if ar else 'ltr'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+{metadata(p['title'], p['description'], path, alt=p['name'] + ' — ' + t['site'], lang=lang)}
+<meta name="theme-color" content="#f43229">
+{css}
+{json_ld([org, crumbs, webpage])}
+</head><body class="detail-page legal-page"><a class="skip" href="#main">{t['skip']}</a>
+<header class="detail-header"><a href="{pre}/" aria-label="{t['home_label']}"><img src="/assets/logo-transparent.webp" width="88" height="88" alt="{t['site']}"></a><nav aria-label="{t['menu']}"><a href="{pre}/#services">{t['services']}</a><a href="{pre}/#about">{t['about']}</a>{switch}<a class="button" href="{pre}/#plan">{t['quote']}</a></nav></header>
+<main id="main"><nav class="breadcrumb" aria-label="{t['breadcrumb']}"><a href="{pre}/">{t['home']}</a><span aria-hidden="true"> / </span><span aria-current="page">{p['name']}</span></nav>
+<div class="legal-hero"><span class="eyebrow">{t['site']} · {L['kicker']}</span><h1>{p['name']}</h1><p>{escape(p['intro'])}</p><p class="legal-meta">{L['updated']}<br>{L['entity']}</p></div>
+<div class="detail-layout"><article class="detail-copy legal-copy">{sections}</article><aside class="detail-checklist"><h2>{L['questions']}</h2><p>{L['questions_sub']}</p><nav class="legal-toc" aria-label="{L['legal_label']}">{toc}</nav><a class="button" href="mailto:info@msakinasbar.com">{t['contact']}</a><a class="phone" href="tel:+966557011839" dir="ltr">+966 55 701 1839</a></aside></div></main>
+{legal_footer(lang)}</body></html>"""
+    out = ROOT / (pre + path).strip('/') / 'index.html'
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(footer_styles(html))
 
 
 def sitemap():
-    paths = ['/'] + [page_url(p) for p in PAGES]
+    paths = ['/'] + [page_url(p) for p in PAGES] + ['/' + p['slug'] + '/' for p in LEGAL.PAGES['ar']]
     rows = []
     for path in paths:
         alts = (f'<xhtml:link rel="alternate" hreflang="ar" href="{ORIGIN}{path}"/>'
@@ -276,6 +334,8 @@ if __name__ == '__main__':
         build_home(lang)
         for page in pages(lang):
             build_page(page, lang)
+        for page in LEGAL.PAGES[lang]:
+            build_legal(page, lang)
     (ROOT / 'sitemap.xml').write_text(sitemap())
     (ROOT / 'robots.txt').write_text('User-agent: *\nAllow: /\n\nSitemap: ' + ORIGIN + '/sitemap.xml\n')
-    print('Generated Arabic + English: 2 homes, 8 service pages, 2 guides, sitemap.xml and robots.txt.')
+    print('Generated Arabic + English: 2 homes, 8 service pages, 2 guides, 6 legal pages, sitemap.xml and robots.txt.')

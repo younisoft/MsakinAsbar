@@ -1,0 +1,15 @@
+"""Shared bilingual footer. ISO marks identify standards, not certificate documents."""
+def render_footer(lang='ar'):
+    ar = lang == 'ar'
+    home = '/' if ar else '/en/'
+    links = [(home+'#contact', 'تواصل معنا' if ar else 'Contact us'), ('/assets/aspar-profile.pdf?v=20261104', 'ملف الشركة التعريفي' if ar else 'Company profile'), (home+'#services', 'خدماتنا' if ar else 'Our services'), (home+'#faq', 'الأسئلة الشائعة' if ar else 'Frequently asked questions'), (home+'guides/choosing-worker-accommodation/', 'دليل اختيار السكن' if ar else 'Accommodation guide'), (home+'terms/', 'الشروط والأحكام' if ar else 'Terms and conditions'), (home+'privacy/', 'سياسة الخصوصية' if ar else 'Privacy policy'), (home+'cancellation-policy/', 'سياسة الإلغاء' if ar else 'Cancellation policy')]
+    nav = ''.join(f'<a href="{url}">{label}</a>' for url,label in links)
+    standards = [('9001:2015', 'إدارة الجودة', 'Quality management'), ('45001:2018', 'الصحة والسلامة المهنية', 'Occupational health & safety'), ('41001:2018', 'إدارة المرافق', 'Facility management')]
+    badges = ''.join(f'<div class="aspar-iso" aria-label="ISO {code} — {arabic if ar else english}"><div class="aspar-iso-mark" aria-hidden="true"><span>ISO</span></div><b dir="ltr">{code}</b></div>' for code,arabic,english in standards)
+    return f'''<footer class="aspar-footer" aria-label="{'تذييل الموقع' if ar else 'Site footer'}">
+  <div class="aspar-footer-inner">
+    <nav class="aspar-footer-nav" aria-label="{'روابط مفيدة' if ar else 'Useful links'}">{nav}<a class="aspar-footer-language" href="{'/en/' if ar else '/'}" lang="{'en' if ar else 'ar'}" hreflang="{'en' if ar else 'ar'}">{'English ↗' if ar else 'العربية ↗'}</a></nav>
+    <div class="aspar-footer-company"><a class="aspar-footer-logo" href="{home}" aria-label="{'مساكن أسبار — الرئيسية' if ar else 'Aspar Residences — Home'}"><img src="/assets/logo-transparent.webp" alt="{'مساكن أسبار' if ar else 'Aspar Residences'}" width="160" height="140" loading="lazy"></a><p>{'شركة أسبار الموحدة التجارية' if ar else 'Aspar Unified Trading Company'}</p><p class="aspar-footer-registration">{'س.ت 4030407410 · الرقم الموحد 7021495051' if ar else 'CR 4030407410 · Unified No. 7021495051'}</p><div class="aspar-footer-contact"><a href="tel:+966557011839" dir="ltr">+966 55 701 1839</a><a href="mailto:info@msakinasbar.com">info@msakinasbar.com</a></div><div class="aspar-footer-standards" aria-label="{'معايير الأيزو' if ar else 'ISO standards'}">{badges}</div></div>
+    <div class="aspar-footer-bottom"><small>© <span id="year">2026</span> {'مساكن أسبار. جميع الحقوق محفوظة.' if ar else 'Aspar Residences. All rights reserved.'}</small><span>{'راحتهم مسؤوليتنا.' if ar else 'Their comfort is our responsibility.'}</span></div>
+  </div>
+</footer>'''

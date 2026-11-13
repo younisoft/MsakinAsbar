@@ -56,7 +56,7 @@ def main():
 
     sitemap = ET.parse(ROOT / 'sitemap.xml')
     urls = [n.text for n in sitemap.findall('.//{http://www.sitemaps.org/schemas/sitemap/0.9}loc')]
-    check(len(urls) == 12 and len(set(urls)) == 12, 'Expected twelve unique sitemap URLs (6 Arabic + 6 English)')
+    check(len(urls) == 18 and len(set(urls)) == 18, 'Expected eighteen unique sitemap URLs (9 Arabic + 9 English)')
     check('Sitemap: ' + ORIGIN + '/sitemap.xml' in (ROOT / 'robots.txt').read_text(), 'Missing sitemap in robots.txt')
     check('Disallow: /\n' not in (ROOT / 'robots.txt').read_text(), 'Production crawling is blocked')
     documents = {}
@@ -116,7 +116,7 @@ def main():
     if errors:
         print('\n'.join('FAIL ' + e for e in errors))
         raise SystemExit(1)
-    print('PASS: 12 indexable pages (Arabic + English) with reciprocal hreflang; unique titles, descriptions, canonical URLs and H1s; valid JSON-LD; sitemap; robots; image dimensions; all internal links and anchors; non-indexable 404.')
+    print('PASS: 18 indexable pages (Arabic + English) with reciprocal hreflang; unique titles, descriptions, canonical URLs and H1s; valid JSON-LD; sitemap; robots; image dimensions; all internal links and anchors; non-indexable 404.')
     if not base:
         print('Static validation only. Live status codes, redirects, headers and search indexing require deployment checks.')
 
