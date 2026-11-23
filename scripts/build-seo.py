@@ -112,7 +112,7 @@ ORG = {"@type": "Organization", "@id": ORIGIN + "/#organization", "name": NAME,
        "description": "مساكن أسبار شركة متخصصة في توفير وتشغيل سكن العمالة للشركات، مع النقل والإعاشة وإدارة المرافق عبر جهة واحدة.",
        "slogan": "راحتهم مسؤوليتنا",
        "url": ORIGIN + "/",
-       "logo": {"@type": "ImageObject", "url": ORIGIN + "/assets/logo-transparent.png", "width": 1254, "height": 1254},
+       "logo": {"@type": "ImageObject", "url": ORIGIN + "/assets/logo-transparent.png", "width": 752, "height": 752},
        "image": ORIGIN + "/assets/share/home.jpg",
        "legalName": LEGAL.LEGAL_NAME,
        "identifier": [{"@type": "PropertyValue", "propertyID": "Saudi Commercial Registration", "value": LEGAL.CR},
@@ -262,7 +262,7 @@ def build_page(p, lang="ar"):
 {css}
 {json_ld([org, crumbs, entity])}
 </head><body class="detail-page"><a class="skip" href="#main">{t['skip']}</a>
-<header class="detail-header"><a href="{pre}/" aria-label="{t['home_label']}"><img src="/assets/logo-transparent.webp" width="88" height="88" alt="{t['site']}"></a><nav aria-label="{t['menu']}"><a href="{pre}/#services">{t['services']}</a><a href="{pre}/#about">{t['about']}</a>{t['switch']}<a class="button" href="{pre}/#plan">{t['quote']}</a></nav></header>
+<header class="detail-header"><a href="{pre}/" aria-label="{t['home_label']}"><img src="/assets/logo-transparent.webp?v=asbar-2" width="88" height="88" alt="{t['site']}"></a><nav aria-label="{t['menu']}"><a href="{pre}/#services">{t['services']}</a><a href="{pre}/#about">{t['about']}</a>{t['switch']}<a class="button" href="{pre}/#plan">{t['quote']}</a></nav></header>
 <main id="main"><nav class="breadcrumb" aria-label="{t['breadcrumb']}"><a href="{pre}/">{t['home']}</a><span aria-hidden="true"> / </span><span aria-current="page">{p['name']}</span></nav>
 <div class="detail-hero"><div><span class="eyebrow">{t['site']} · {t['kicker']}</span><h1>{p['name']}</h1><p>{p['intro']}</p><a class="button" href="{pre}/#plan">{t['cta']}</a></div><img src="/assets/{p['image']}" width="768" height="560" alt="{p['alt']}" fetchpriority="high"></div>
 <div class="detail-layout"><article class="detail-copy">{sections}<section class="detail-faq"><h2>{t['faq_title']}</h2>{faq}</section></article><aside class="detail-checklist"><h2>{t['before']}</h2><p>{t['before_sub']}</p><ul>{checks}</ul><a class="button" href="{pre}/#contact">{t['contact']}</a><a class="phone" href="tel:+966500558677" dir="ltr">+966 50 055 8677</a></aside></div>
@@ -305,7 +305,7 @@ def build_legal(p, lang="ar"):
 {css}
 {json_ld([org, crumbs, webpage])}
 </head><body class="detail-page legal-page"><a class="skip" href="#main">{t['skip']}</a>
-<header class="detail-header"><a href="{pre}/" aria-label="{t['home_label']}"><img src="/assets/logo-transparent.webp" width="88" height="88" alt="{t['site']}"></a><nav aria-label="{t['menu']}"><a href="{pre}/#services">{t['services']}</a><a href="{pre}/#about">{t['about']}</a>{switch}<a class="button" href="{pre}/#plan">{t['quote']}</a></nav></header>
+<header class="detail-header"><a href="{pre}/" aria-label="{t['home_label']}"><img src="/assets/logo-transparent.webp?v=asbar-2" width="88" height="88" alt="{t['site']}"></a><nav aria-label="{t['menu']}"><a href="{pre}/#services">{t['services']}</a><a href="{pre}/#about">{t['about']}</a>{switch}<a class="button" href="{pre}/#plan">{t['quote']}</a></nav></header>
 <main id="main"><nav class="breadcrumb" aria-label="{t['breadcrumb']}"><a href="{pre}/">{t['home']}</a><span aria-hidden="true"> / </span><span aria-current="page">{p['name']}</span></nav>
 <div class="legal-hero"><span class="eyebrow">{t['site']} · {L['kicker']}</span><h1>{p['name']}</h1><p>{escape(p['intro'])}</p><p class="legal-meta">{L['updated']}<br>{L['entity']}</p></div>
 <div class="detail-layout"><article class="detail-copy legal-copy">{sections}</article><aside class="detail-checklist"><h2>{L['questions']}</h2><p>{L['questions_sub']}</p><nav class="legal-toc" aria-label="{L['legal_label']}">{toc}</nav><a class="button" href="mailto:info@msakinasbar.com">{t['contact']}</a><a class="phone" href="tel:+966557011839" dir="ltr">+966 55 701 1839</a></aside></div></main>
